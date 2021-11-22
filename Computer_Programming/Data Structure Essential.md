@@ -2,6 +2,12 @@
 
 ---
 
+- [데이터직군에서 "무조건" 알고리즘 공부를 해야할까?](https://youtu.be/9TyyMtlk5i4)
+
+- [프로그래밍에서 알고리즘이 도대체 왜!? 중요할까?](https://youtu.be/i3MqN7yBik0)
+
+---
+
 ### 자료구조란
 
 - 데이터 특성을 파악하여 미리 정해놓은 일정한 규칙에 따라서 체계적으로 데이터를 구조화 시키고 표현
@@ -453,3 +459,33 @@ example_sort(test)
 - 단, **입출력값 로직**에 따라 달라질 수 있다.
 
 ###
+
+
+### 📌Review
+
+---
+
+##### 오늘 배운 것
+
+```
+1) 컴퓨터의 입장에서 생각.
+2) 파이썬 활용에 대해 깊이 생각.
+3) 문제해결을 위한 자료구조 공부.
+```
+
+##### 오늘 해야할 것
+
+```
+1) 자료구조 동작에 대해 생각
+2) 파이썬을 활용하는 경우 효율성을 고려하며 활용
+```
+
+### 📚Reference
+
+---
+
+- [A Data Scientist’s Guide to Data Structures & Algorithms, Part 1](https://towardsdatascience.com/a-data-scientists-guide-to-data-structures-algorithms-1176395015a0)
+
+- [Algorithms, Data Structures, and Data Science](https://towardsdatascience.com/algorithms-data-structures-and-data-science-8d7a4e62758e)
+
+- [How important is Data Structures and Algorithm knowledge important for Data Scientist?](https://www.kaggle.com/questions-and-answers/63523)
