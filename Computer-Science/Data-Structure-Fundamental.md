@@ -3,6 +3,7 @@
 ---
 
 - [자료구조를 알아야 하는 이유](https://youtu.be/OH7prOt3vQA)
+<br>
 
 - [무조건 알아야하는 자료구조/ADT](https://youtu.be/Nk_dGScimz8)
 
@@ -17,10 +18,13 @@
 > 추상적 자료형(Abstract Data Type, 줄여서 ADT)은 기능의 구현 부분을 나타내지 않고 순수한 기능이 무엇인지 나열한 것.
 
 - 프로그래밍에서 테이터처리를 위한 자료형 존재.
+<br>
 
 - 파이썬에서 프로그래밍을 위한 도구 -> **기본자료형(숫자, 문자열, 리스트, 딕셔너리 등)**
+<br>
 
 - ADT는 추상적으로 필요한 기능을 나열한 일족의 명세서(로직).
+<br> 
 
    - ADT는 기본자료형(대표적으로 리스트, 숫자, 문자열)을 활용하여 **사용자에 의해 구현**
 
@@ -299,6 +303,7 @@ print(node.next.value)      # 4 다음 값 검색
 ```
 
 - 위의 head 노드를 삭제하는 것도 head 자체를 바로 삭제하는 것이 아니라, head의 **위치를 바꿔주는 것**이다.
+<br>
 
 - 기존방식이었던 인덱스를 통해 함수로 삼입/삭제/검색이 가능했었지만, 연결리스트는 인덱스의 기능을 할 수 있도록 **노드별로 위치를 변경**해줘야한다는 다른 점이 있다.
 
@@ -307,10 +312,13 @@ print(node.next.value)      # 4 다음 값 검색
 ![image](https://github.com/Maiven/data-science/blob/main/%E1%84%8F%E1%85%B2_%E1%84%89%E1%85%A1%E1%86%BC%E1%84%89%E1%85%A6.png?raw=true)
 
 - 큐는 항목을 FIFO(선입 선출) 순서로 저장하는 자료구조
+<br>
 
 - **deque**(double-ended queue)
+<br>
 
    - 큐에서 **양방향**으로 데이터를 처리
+<br>
 
    - double은 자료구조에서 양방향을 의미
 
@@ -333,7 +341,7 @@ print('queue:', queue)
 ```
 
 - Queue 클래스의 경우, 먼저 init 메서드를 정의
-
+<br>
    - 이 메서드에서 front(앞)와 rear(뒤) 인스턴스변수를 초기화 해야한다.
 
 ```python
@@ -344,9 +352,11 @@ class Queue:
 ```
 
 - 큐의 Time and Space Complexity(시간, 공간 복잡도)
+<br>
 
    - Enqueue(대기열에 넣기)
      -> 데이터를 큐에 추가하면 (데이터를 큐 rear에 추가) O(1) 시간이 걸린다.
+<br>
 
    - Dequeue(대기열에서 빼기)
      -> 데이터를 큐에서 빼면 (데이터를 큐 front에서 제거) O(1) 시간이 걸린다.
@@ -421,6 +431,7 @@ q.ord_desc()
 ```
 
 - enqueue에서는 새로운 노드의 저장공간(변수)를 만들어주고, 그 저장공간에 노드를 넣어주는 개념
+<br>
 
 - dequeue는 삭제할 노드를 위해 저장공간(변수)를 만들어주고, 그 저장공간에 삭제노드를 넣어주는 개념
 
@@ -491,8 +502,10 @@ class Stack:
 
 - push 함수 : 연결리스트의 헤드에 새 노드 삽입
 연결리스트의 헤드(최상단)에 있는 노드 추출
+<br> 
 
 - pop 함수 : 연결리스트의 헤드(최상단)에 있는 노드 추출
+<br>
 
 - 스택의 소스코드도 큐와 동작은 유사하지만, 입출력의 순서는 반대!!
 
@@ -580,8 +593,9 @@ s.ord_desc()
 ---
 
 - [파이썬의 문법을 활용한 자료구조](https://docs.python.org/ko/3/tutorial/datastructures.html)
-
+<br>
 - [파이썬 복잡도 상세내용](https://www.ics.uci.edu/~pattis/ICS-33/lectures/complexitypython.txt)
-
+<br>
 - [데이터의 7V](https://3months.tistory.com/348)
-
+<br>
+- [자료구조 - 스택, 큐](https://devuna.tistory.com/22)
