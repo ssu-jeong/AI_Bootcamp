@@ -518,4 +518,6 @@ print (chain_hash_table)
 
 - [Basics of Hash Tables](https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/tutorial/)
 
+- [파이썬자료구조(해시)](https://yunaaaas.tistory.com/46)
 
+- [파이썬으로 구현하는 자료구조 요약정리 - 해시테이블](https://davinci-ai.tistory.com/19)
