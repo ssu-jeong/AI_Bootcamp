@@ -2,7 +2,7 @@
 
 ---
 
-## a.연결 리스트와 배열과 배열리스트
+## a. 연결 리스트와 배열과 배열리스트
 
 ---
 
@@ -112,7 +112,7 @@ ___
 
 ![image](https://wikidocs.net/images/page/34315/02b%EB%8B%A8%EC%9D%BC%EC%82%BD%EC%9E%85%EC%97%86%EB%8A%94.png)
 
-##### 저장된 노드가 이쓴 경우
+##### 저장된 노드가 있는 경우
 
 - 기존 노드가 밀려나는 식으로 새로운 노드가 들어온다. 
 
@@ -489,3 +489,947 @@ if __name__=="__main__":
     result = sl.searchNode('555')
     print("555의 위치 : {}".format(result))
 ```
+
+## c. 이중 연결 리스트(doubly linked list)
+
+---
+
+## 1. 구조
+
+---
+
+### 기본구조
+
+---
+
+- 단일 연결 리스트는 단방향(head쪽)으로 만 삽입, 삭제, 조회가능.
+
+- 이중 연결 리스트는 양방향 이동을 구현하므로 다음 노드와 이전 노드의 이동이 가능하도록 구성
+
+   - 때문에 노드에 변수 next로 다음노드를, 변수로 prev로 이전노드를 지정하여 이동할 수 있도록 한다.
+
+- 리스트에서 변수 head만 아니라 변수 tail도 만들어 리스트의 앞과 뒤로 접근 가능하도록 한다.
+
+![image](https://wikidocs.net/images/page/34342/02c%EC%9D%B4%EC%A4%91%EC%97%B0%EA%B2%B0%EB%A6%AC%EC%8A%A4%ED%8A%B8%EA%B8%B0%EB%B0%98.png)
+
+#### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+```
+
+## 2. 삽입
+
+---
+
+### 삽입
+
+---
+
+이중 연결 리스트의 삽입 방법은 단일 연결 리스트 처럼 head로 넣는 방법과 같은 방법으로 tail을 통해 넣는 방법이 있다.
+
+- 각 상황에 따라 노드의 next와 prev값을 다음노드와 이전노드로 지정
+
+#### 지정된 노드가 없는 경우(head, tail)
+
+아무런 노드도 없는 경우는 head와 tail값이 None이다. 따라서 head를 통해 넣든, tail을 통해 넣든 결과가 같다.
+
+![image](https://wikidocs.net/images/page/34404/02c%EC%97%86%EC%9D%84%EA%B2%BD%EC%9A%B0%EC%82%BD%EC%9E%851.png)
+
+#### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    # dl.insertNodeAfter('FirstData') #head삽입 테스트
+    dl.insertNodeBefore('LastData') #tail삽입 테스트
+```
+
+#### 지정된 노드가 있는 경우(head)
+
+새로운 노드와 기존에 head를 차지하던 노드도 신경써야한다. 기존에 있던 노드의 prev를 새로 만드는 노드를 가리키도록 해야하기 때문!
+
+![image](https://wikidocs.net/images/page/34404/02c%EC%9D%B4%EC%A4%91head%EC%82%BD%EC%9E%851.png)
+
+따라서 다음 수행절차 진행.
+
+1. 현재 head가 가리키는 기존 노드의 prev를 새로 생성하는 노드로 지정
+
+2. 새로 생성한 노드의 next를 기존 노드로 지정
+
+3. head를 새로 생성한 노드로 변경
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1st')  # head삽입 테스트
+    dl.insertNodeBefore('2nd')  # head삽입 테스트
+    dl.insertNodeBefore('3rd')  # head삽입 테스트
+
+```
+
+#### 저장된 노드가 있는 경우(tail)
+
+head와 유사한 점이 많다. 단지 head가 tail로, prev를 next로 next를 prev로 바꿔서 생각하면 된다!
+
+![image](https://wikidocs.net/images/page/34404/02c%EC%9D%B4%EC%A4%91tail%EC%82%BD%EC%9E%851.png)
+
+따라서 다음 수행절차 진행
+
+1. 현재 tail이 가리키는 기존 노드의 next를 새로 생성하는 노드로 지정
+
+2. 새로 생성한 노드의 prev를 기존 노드로 지정
+
+3. tail을 새로 생성한 노드로 변경
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1st')  # head삽입 테스트
+    dl.insertNodeBefore('2nd')  # head삽입 테스트
+    dl.insertNodeBefore('3rd')  # head삽입 테스트
+    dl.insertNodeAfter('B1st') # tail삽입 테스트
+    dl.insertNodeAfter('B2nd') # tail삽입 테스트
+    dl.insertNodeAfter('B3rd') # tail삽입 테스트
+```
+
+## 3. 출력
+
+
+---
+
+### 출력
+
+---
+
+이중 연결 리스트의 head를 통한 출력은 단일 연결 리스트와 동일.
+
+##### 저장된 노드가 없을 때
+
+- 그냥 없다 라는 출럭
+
+##### 저장된 노드가 있을 때(head)
+
+- 단일 연결 리스트와 동일
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+            print(self.head.value)
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+    #head로 삭제
+    def deleteNodeBefore(self):
+        #없을 경우 - > 스킵
+        if self.head is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 head가 가리키는 노드의 next를 새로운 head로 지정
+            self.head = self.head.next
+            #2. 새로운 head의 prev를 None으로 변경
+            self.head.prev = None
+
+    def printNodeBefore(self):
+        #데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t') #end로 print 마지막 개행을 변경할 수 있습니다.
+            link = self.head #처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+
+            #link가 가리키는 노드가 없을 때까지 반복
+            #None,0,""는 조건판단에서 False 처리, 그 외는 True로 처리된다.
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.next #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1st')  # head삽입 테스트
+    dl.insertNodeBefore('2nd')  # head삽입 테스트
+    dl.insertNodeAfter('3rd')  # head삽입 테스트
+    dl.insertNodeAfter('4rd')  # head삽입 테스트
+    dl.printNodeBefore()
+```
+
+##### 저장된 노드가 있을 때(tail)
+
+순회구조는 head에서 tail로, next에서 prev로 바뀐 것 밖에 없다. 대신 뒤에서부터 출력하므로 head로 할 때와는 반대
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+            print(self.head.value)
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+    #head로 삭제
+    def deleteNodeBefore(self):
+        #없을 경우 - > 스킵
+        if self.head is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 head가 가리키는 노드의 next를 새로운 head로 지정
+            self.head = self.head.next
+            #2. 새로운 head의 prev를 None으로 변경
+            self.head.prev = None
+
+    def printNodeBefore(self):
+        #데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t') #end로 print 마지막 개행을 변경할 수 있습니다.
+            link = self.head #처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+
+            #link가 가리키는 노드가 없을 때까지 반복
+            #None,0,""는 조건판단에서 False 처리, 그 외는 True로 처리된다.
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.next #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    def printNodeAfter(self):
+        #데이터가 없을 때
+        if self.tail is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t')
+            link = self.tail
+
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.prev #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1st')  # head삽입 테스트
+    dl.insertNodeBefore('2nd')  # head삽입 테스트
+    dl.insertNodeAfter('3rd')  # head삽입 테스트
+    dl.insertNodeAfter('4rd')  # head삽입 테스트
+    dl.printNodeBefore()
+    dl.printNodeAfter()
+```
+
+## 4. 삭제
+
+---
+
+### 식제
+
+---
+
+삽입과 마찬가지로 삭제 또한 head를 통한 삭제와 tail을 통한 삭제가 있다.
+
+##### 저장된 노드가 없을 때
+
+당연히 삭제연산 경우세서 제외
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+    def printNodeBefore(self):
+        #데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t') #end로 print 마지막 개행을 변경할 수 있습니다.
+            link = self.head #처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+
+            #link가 가리키는 노드가 없을 때까지 반복
+            #None,0,""는 조건판단에서 False 처리, 그 외는 True로 처리된다.
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.next #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    def printNodeAfter(self):
+        #데이터가 없을 때
+        if self.tail is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t')
+            link = self.tail
+
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.prev #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    #head로 삭제
+    def deleteNodeBefore(self):
+        #없을 경우 - > 스킵
+        if self.head is None :
+            print("삭제할 노드가 없습니다.")
+            return
+
+    #tail로 삭제
+    def deleteNodeAfter(self):
+        #없을 경우 - > 스킵
+        if self.tail is None :
+            print("삭제할 노드가 없습니다.")
+            return
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.deleteNodeBefore()
+    dl.deleteNodeAfter()
+```
+
+##### 저장된 노드가 있을 때(head)
+
+head를 통해 노드를 삭제할 경우, 곧 head가 될 노드의 prev는 None으로 변경해줘야 한다.
+
+![image](https://wikidocs.net/images/page/34501/02c%EC%9D%B4%EC%A4%91head%EC%82%AD%EC%A0%9C.png)
+
+따라서 다음 수행절차를 진행
+
+1. 현재 head가 가리키는 노드의 next를 새로운 head로 지정
+
+2. 새로운 head의 prev를 None으로 변경
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+    def printNodeBefore(self):
+        #데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t') #end로 print 마지막 개행을 변경할 수 있습니다.
+            link = self.head #처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+
+            #link가 가리키는 노드가 없을 때까지 반복
+            #None,0,""는 조건판단에서 False 처리, 그 외는 True로 처리된다.
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.next #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    def printNodeAfter(self):
+        #데이터가 없을 때
+        if self.tail is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t')
+            link = self.tail
+
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.prev #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    #head로 삭제
+    def deleteNodeBefore(self):
+        #없을 경우 - > 스킵
+        if self.head is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 head가 가리키는 노드의 next를 새로운 head로 지정
+            self.head = self.head.next
+            #2. 새로운 head의 prev를 None으로 변경
+            self.head.prev = None
+
+    #tail로 삭제
+    def deleteNodeAfter(self):
+        #없을 경우 - > 스킵
+        if self.tail is None :
+            print("삭제할 노드가 없습니다.")
+            return
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1stF')
+    dl.insertNodeAfter('1stB')
+    dl.insertNodeBefore('2ndF')
+    dl.insertNodeAfter('2ndB')
+    dl.printNodeBefore()
+    dl.deleteNodeBefore() #head로 삭제
+    dl.printNodeBefore()
+```
+
+##### 저장된 노드가 있을 때(tail)
+
+head 삭제방법과 방법은 일치. 다만 head가 tail로, prev가 next로 n 변경될 뿐이다.
+
+![image](https://wikidocs.net/images/page/34501/02c%EC%9D%B4%EC%A4%91tail%EC%82%AD%EC%A0%9C.png)
+
+따라서 다음 수행절차 진행
+
+1. 현재 tail가 가리키는 노드의 prev를 새로운 tail로 지정
+
+2. 새로운 tail의 next를 None으로 변경
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+    def printNodeBefore(self):
+        #데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t') #end로 print 마지막 개행을 변경할 수 있습니다.
+            link = self.head #처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+
+            #link가 가리키는 노드가 없을 때까지 반복
+            #None,0,""는 조건판단에서 False 처리, 그 외는 True로 처리된다.
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.next #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    def printNodeAfter(self):
+        #데이터가 없을 때
+        if self.tail is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t')
+            link = self.tail
+
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.prev #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    #head로 삭제
+    def deleteNodeBefore(self):
+        #없을 경우 - > 스킵
+        if self.head is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 head가 가리키는 노드의 next를 새로운 head로 지정
+            self.head = self.head.next
+            #2. 새로운 head의 prev를 None으로 변경
+            self.head.prev = None
+
+    #tail로 삭제
+    def deleteNodeAfter(self):
+        #없을 경우 - > 스킵
+        if self.tail is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 tail이 가리키는 노드의 prev를 새로운 tail로 지정
+            self.tail = self.tail.prev
+            #2. 새로운 head의 prev를 None으로 변경
+            self.tail.next = None
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1stF')
+    dl.insertNodeAfter('1stB')
+    dl.insertNodeBefore('2ndF')
+    dl.insertNodeAfter('2ndB')
+    dl.printNodeBefore()
+    dl.deleteNodeBefore()  # head로 삭제
+    dl.printNodeBefore()
+    dl.deleteNodeAfter()  # tail로 삭제
+    dl.printNodeBefore()
+```
+
+## 5. 탐색
+
+---
+
+### 탐색
+
+---
+
+출력과 탐색의 과정은 같다. 이 작업도 단일 연결 리스트와 동일하며 단지 head에서 부터인지 tail에서 부터인지로 나뉜다.
+
+다만 tail로 탐색해서 나온 위치(인덱스)는 초기값을 -1로 주고 진행할 때마다 1씩 감소시켜서 head로 구한 인덱스와 구분시키도록 한다.(파이썬의 리스트처럼!)
+
+##### 코드구현
+
+```python
+#이중 링크드 리스트
+class DLinkedList:
+
+    #D_L_list에서 쓸 노드
+    class Node:
+        def __init__(self, v, n = None, p = None):
+            self.value = v #저장된 데이터
+            self.next = n #다음 노드 가리키는 변수
+            self.prev = p #이전 노드 가리키는 변수
+
+    #D_L_List에서 필요한 변수
+    def __init__(self):
+        self.head = None #첫 생성시 내부에는 노드가 없으므로
+        self.tail = None
+
+    #head로 삽입. v : 데이터
+    def insertNodeBefore(self, v):
+        #없을 경우
+        if self.head is None:
+            self.head = self.Node(v)
+            self.tail = self.head #같은 노드를 가리킴
+        else:
+            #self.head : 기존노드, self.head.prev : 기존노드의 prev
+            self.head.prev = self.Node(v,n=self.head) #1,2번을 동시수행
+            #self.head.prev : 기존노드의 prev == 새로운 노드
+            self.head = self.head.prev #3. head를 새로운 노드로 변경
+
+    #tail로 삽입. v : 데이터
+    def insertNodeAfter(self, v):
+        #없을 경우
+        if self.tail is None:
+            self.tail = self.Node(v)
+            self.head = self.tail #같은 노드를 가리킴
+        else:
+            #self.tail : 기존노드, self.tail.next : 기존 노드의 next
+            self.tail.next = self.Node(v,p=self.tail) #1,2번을 동시수행
+            #self.tail.next : 기존노드의 next == 새로운 노드
+            self.tail = self.tail.next #3. tail를 새로운 노드로 변경
+
+    def printNodeBefore(self):
+        #데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t') #end로 print 마지막 개행을 변경할 수 있습니다.
+            link = self.head #처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+
+            #link가 가리키는 노드가 없을 때까지 반복
+            #None,0,""는 조건판단에서 False 처리, 그 외는 True로 처리된다.
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.next #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    def printNodeAfter(self):
+        #데이터가 없을 때
+        if self.tail is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            print("<현재 리스트 구조>", end='\t')
+            link = self.tail
+
+            while link :
+                print(link.value, '<->' , end = ' ')
+                link = link.prev #link를 현 위치 노드의 next로 변경
+            print() #줄바꿈 용
+
+    #head로 삭제
+    def deleteNodeBefore(self):
+        #없을 경우 - > 스킵
+        if self.head is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 head가 가리키는 노드의 next를 새로운 head로 지정
+            self.head = self.head.next
+            #2. 새로운 head의 prev를 None으로 변경
+            self.head.prev = None
+
+    #tail로 삭제
+    def deleteNodeAfter(self):
+        #없을 경우 - > 스킵
+        if self.tail is None :
+            print("삭제할 노드가 없습니다.")
+            return
+        else:
+            #1.현재 tail이 가리키는 노드의 prev를 새로운 tail로 지정
+            self.tail = self.tail.prev
+            #2. 새로운 head의 prev를 None으로 변경
+            self.tail.next = None
+
+    #head로 조회(탐색)
+    def searchNodeBefore(self,v):
+        # 데이터가 없을 때
+        if self.head is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            link = self.head  # 처음은 head를 지정. 이후부터는 현 노드의 next를 지정
+            index  = 0 #몇 번째 노드인지 기록
+            while link:
+                #내가 찾는 노드인지 확인
+                if v == link.value:
+                    return index #위치를 반환
+                else:
+                    link = link.next  # link를 현 위치 노드의 next로 변경
+                    index += 1 #위치값 1 증가
+            #여기까지 왔다 == 해당 v값을 가진 노드가 없다.
+
+    # tail로 조회(탐색)
+    def searchNodeAfter(self, v):
+        # 데이터가 없을 때
+        if self.tail is None:
+            print("저장된 데이터가 없음")
+            return
+        else:
+            link = self.tail
+            index = 0  # 몇 번째 노드인지 기록
+            while link:
+                # 내가 찾는 노드인지 확인
+                if v == link.value:
+                    return index  # 위치를 반환
+                else:
+                    link = link.prev  # link를 현 위치 노드의 prev로 변경
+                    index -= 1  # 위치값 1 감소
+            # 여기까지 왔다 == 해당 v값을 가진 노드가 없다.
+
+
+##테스트
+if __name__=="__main__":
+    dl = DLinkedList()
+    dl.insertNodeBefore('1stF')
+    dl.insertNodeAfter('1stB')
+    dl.insertNodeBefore('2ndF')
+    dl.insertNodeAfter('2ndB')
+    dl.printNodeBefore()
+
+    # head로 탐색
+    print("<head로 위치 탐색>")
+    result = dl.searchNodeBefore('2ndF')
+    print("2ndF 위치 : {}".format(result))
+
+    result = dl.searchNodeBefore('1stF')
+    print("1stF 위치 : {}".format(result))
+
+    # tail로 탐색
+    print("<tail로 위치 탐색>")
+    result = dl.searchNodeAfter('2ndB')
+    print("2ndB 위치 : {}".format(result))
+
+    result = dl.searchNodeAfter('1stF')
+    print("1stF 위치 : {}".format(result))
+```
+
+### Reference
+
+---
+
+- 참조: [파이썬 자료구조 알고리즘](https://wikidocs.net/34534)
