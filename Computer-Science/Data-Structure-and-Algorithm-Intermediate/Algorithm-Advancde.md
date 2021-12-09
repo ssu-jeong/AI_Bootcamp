@@ -214,7 +214,7 @@ print(fib(20))
 
 ```python
 # DP를 활용한 문제해결
-# 문제 : 숫자 2,4,6으로 특정 숫자 N을 덧셈으로 구하는 방법은 몇가지일까?(숫자 중복사용가능)
+# 문제: 숫자 2,4,6으로 특정 숫자 N을 덧셈으로 구하는 방법은 몇가지일까?(숫자 중복사용가능)
 # 분할정복(divide & conquer)개념을 다시 생각해보자. 
 
 def solve(n):
@@ -228,16 +228,16 @@ def solve(n):
    return solve(n-2) + solve(n-4) + solve(n-6)
 
    # 세부과정
-   # 1단계   -> solve(6) divide : solve(4) + solve(2) + solve(0)   ==> 4
-   # 1-1단계 -> solve(4) divide : solve(2) + solve(0) + solve(-2)  ==> 2
-   # 1-2단계 -> solve(2) divide : solve(0) + solve(-2) + solve(-4) ==> 1
+   # 1단계   -> solve(6) divide: solve(4) + solve(2) + solve(0)   ==> 4
+   # 1-1단계 -> solve(4) divide: solve(2) + solve(0) + solve(-2)  ==> 2
+   # 1-2단계 -> solve(2) divide: solve(0) + solve(-2) + solve(-4) ==> 1
 
-   # 2단계   -> solve(0)       conquer : 1
-   # 2-1단계 -> solve(마이너스값) conquer : 0
+   # 2단계   -> solve(0)       conquer: 1
+   # 2-1단계 -> solve(마이너스값) conquer: 0
 
-   # 3단계 -> 위의 1-2단계 conquer(merge) : 2단계해결값(1) + 2-1단계해결값(0) + 2-1단계해결값(0) = 1
-   # 4단계 -> 위의 1-1단계 conquer(merge) : 1-2단계해결값(1) + 2단계해결값(1) + 2-1단계해결값(0) = 2
-   # 5단계 -> 최종1단계    conquer(merge) : 1-1단계해결값(2) + 1-2단계해결값(1) + 2단계해결값(1) = 4
+   # 3단계 -> 위의 1-2단계 conquer(merge): 2단계해결값(1) + 2-1단계해결값(0) + 2-1단계해결값(0) = 1
+   # 4단계 -> 위의 1-1단계 conquer(merge): 1-2단계해결값(1) + 2단계해결값(1) + 2-1단계해결값(0) = 2
+   # 5단계 -> 최종1단계    conquer(merge): 1-1단계해결값(2) + 1-2단계해결값(1) + 2단계해결값(1) = 4
 
 print(solve(6))
 ```
@@ -278,7 +278,7 @@ def solve(memo_num):
 
     return dp[memo_num]
 
-print("문제해결값 : ",solve(6))
+print("문제해결값: ",solve(6))
 ```
 
 - 메모이제이션 변수를 딕셔너리로 할당
@@ -378,7 +378,7 @@ if node. weight == 같다
 ```
 
 ```python
-# 잔돈갯수를 구하자.(갖고 있는 돈 : 100원)
+# 잔돈갯수를 구하자.(갖고 있는 돈: 100원)
 price = int(input('물건값을 입력하세요.'))
 
 change = 100 - price
